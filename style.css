@@ -1,0 +1,210 @@
+:root {
+  --joy_teal: #4aa6a6; /* Global variable */
+  --joy_white: #f8f8f8;
+  --joy_lightblue: aliceblue;
+  --joy_dark: darkslategray;
+}
+
+body,html{
+    height: 100%;
+    margin: 0;
+}
+
+body{
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 200;
+}
+
+h1,h2,h3,h4,h5,h6,p{
+    margin: 0;
+    font-weight: inherit;
+    font-family: inherit;
+}
+
+ul{
+    list-style: none;
+}
+
+section{
+    height: 100%;
+}   
+
+.container {
+    background: radial-gradient(var(--joy_teal),var(--joy_white));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.item{
+    width: 50%;
+    text-align: center;
+}
+
+
+.body_big{
+    font-size: 4.5vw;
+    color: var(--joy_lightblue);
+    letter-spacing: 2.5px;
+}
+
+.body_med{
+    font-size: 1.5vw;
+}
+
+.body_tiny{
+    font-size: .8vw;
+    font-weight: 400;
+}
+
+.blink_soft{
+    animation: blink_soft_anim 1.4s ease-out infinite;
+}
+
+.gamepad_loader{
+    display: none;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+}
+
+.gamepad_svg{
+    width: 64px;
+    height: 64px;
+    stroke-width: .85;
+    fill: none;
+    stroke: var(--joy_lightblue);
+    margin-right: 1em;
+}
+
+.gamepad_svg path{
+    stroke-width: inherit;
+    stroke: inherit;
+    stroke-dasharray: 100;
+    stroke-dashoffset: 100;
+}
+
+.gamepad_loader select{
+    font: inherit;
+    outline: none;
+    font-size: 1.5vw;
+    padding: .3em 1em;
+    cursor: pointer;
+    width: 18vw;
+    border: none;
+    background: var(--joy_lightblue);
+    border-radius: 4px;
+    color: var(--joy_dark);
+}
+
+/* ANIMATIONS */
+
+@keyframes blink_soft_anim{
+    0%{
+        opacity: .5;
+    }
+    45%{
+        opacity: 1;
+    }
+    100%{
+        opacity: .5;
+    }
+}
+
+.gamepad_svg path:nth-child(2) { animation-delay: 0.2s; stroke-width: 1.1; }
+.gamepad_svg path:nth-child(3) { animation-delay: 0.3s; stroke-width: 1.1; }
+.gamepad_svg path:nth-child(4) { animation-delay: 0.4s; stroke-width: 1.1; }
+.gamepad_svg path:nth-child(5) { animation-delay: 0.5s; stroke-width: 1.1; }
+.gamepad_svg path:nth-child(6) { animation-delay: 0.3s; }
+.gamepad_svg path:nth-child(7) { animation-delay: 0.3s; }
+.gamepad_svg path:nth-child(8) { animation-delay: 0.4s; }
+.gamepad_svg path:nth-child(9) { animation-delay: 0.4s; }
+
+@keyframes draw_svg {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+
+/* MULTIPLAYER */
+
+/* .playerbox{
+    flex: .25;
+}
+
+.playerbox_ul {
+    list-style: none;
+    margin: 20px;
+    display: flex;
+    flex-direction: column;
+    padding: 3.5em;
+    background: var(--joy_lightblue);
+    backdrop-filter: blur(31px);
+    border-radius: 24px;
+    align-items: center;
+}
+
+.playerbox li{
+    width: fit-content;
+    display: flex;
+    align-items: center;
+}
+
+.playerbox h2{
+    border-radius: 30px;
+    padding: 0.25em 1em;
+}
+
+.playerbox svg{
+    width: 36px;
+    height: 36px;
+    fill: none;
+    color: var(--joy_lightblue);
+}
+
+.playerbox path {
+    stroke-width: 0.85;
+}
+
+.player_name{
+    background: #d4b8ea;
+}
+
+.player_status-icon {
+    color: var(--joy_teal);
+    margin-right: 3px;
+} */
+
+
+/* REMOTE ANIMATION */
+/* .animated-svg {
+  stroke: #000;
+  fill: white;
+  stroke-width: 1.5;
+}
+
+.animated-svg path {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  animation: draw 2s ease forwards;
+} */
+
+/* Optional: stagger animation for each path */
+/* .animated-svg path:nth-child(0) { animation-delay: 0.2s; }
+.animated-svg path:nth-child(1) { animation-delay: 0.2s; }
+.animated-svg path:nth-child(2) { animation-delay: 0.2s; }
+.animated-svg path:nth-child(3) { animation-delay: 0.3s; }
+.animated-svg path:nth-child(4) { animation-delay: 0.4s; }
+.animated-svg path:nth-child(5) { animation-delay: 0.5s; }
+.animated-svg path:nth-child(6) { animation-delay: 0.6s; }
+.animated-svg path:nth-child(7) { animation-delay: 0.7s; }
+.animated-svg path:nth-child(8) { animation-delay: 0.8s; }
+.animated-svg path:nth-child(9) { animation-delay: 0.9s; } */
+/* 
+@keyframes draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+} */
