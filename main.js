@@ -116,7 +116,8 @@ let p1Flag = {
   'sl_butt': false,
   'sr_butt': false,
   'tl_butt': false,
-  'tr_butt': false
+  'tr_butt': false,
+  'mr_butt': false
 }
 
 let p1Started = {
@@ -131,7 +132,8 @@ let p1Started = {
   'sl_butt': false,
   'sr_butt': false,
   'tl_butt': false,
-  'tr_butt': false
+  'tr_butt': false,
+  'mr_butt': false
 }
 
 let buttonMapper = {
@@ -146,7 +148,9 @@ let buttonMapper = {
   4:'sl_butt',
   5:'sr_butt',
   6:'tl_butt',
-  7:'tr_butt'
+  7:'tr_butt',
+  9:'mr_butt'
+
 }
 
 let noteMapper = {
@@ -157,11 +161,12 @@ let noteMapper = {
   'dl_butt': "C#",
   'dr_butt': "F#",
   'dt_butt': "D#",
-  'dd_butt': "B",
+  'dd_butt': "F#",
   'sl_butt': "G",
   'sr_butt': "A",
   'tl_butt': "G#",
-  'tr_butt': "A#"
+  'tr_butt': "A#",
+  'mr_butt': 'B'
 }
 
 
