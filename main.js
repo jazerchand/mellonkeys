@@ -2,8 +2,17 @@
 
 let midiOutputControllerName;
 const midiDropdown = document.getElementById('midi_dropdown');
+
+let jThresh = 0.2;
+let defaultOctave = 4;
+
 let gamepadFlag = false;
 let gamepad_i;
+
+let gamepadPing = setInterval(() => {
+  if (gamepadFlag) gamepadManager(gamepad_i);
+  
+}, 10);
 
 
 midiDropdown.addEventListener("change", (e)=>{
@@ -15,7 +24,7 @@ window.addEventListener("gamepadconnected", (e) => {
   hidePrompter();
   navigator.getGamepads().forEach((gamepad,i) => {
     if(gamepad!=null){
-        console.log(gamepad);
+        // console.log(gamepad);
         gamepad_i = i;
         gamepadManager(gamepad_i);
     }
@@ -141,27 +150,57 @@ let buttonMapper = {
 }
 
 let noteMapper = {
-  'l_butt': "C4",
-  'r_butt': "F4",
-  't_butt': "D4",
-  'b_butt': "E4",
-  'dl_butt': "C#4",
-  'dr_butt': "F#4",
-  'dt_butt': "D#4",
-  'dd_butt': "B4",
-  'sl_butt': "G4",
-  'sr_butt': "A4",
-  'tl_butt': "G#4",
-  'tr_butt': "A#4"
+  'l_butt': "C",
+  'r_butt': "F",
+  't_butt': "D",
+  'b_butt': "E",
+  'dl_butt': "C#",
+  'dr_butt': "F#",
+  'dt_butt': "D#",
+  'dd_butt': "B",
+  'sl_butt': "G",
+  'sr_butt': "A",
+  'tl_butt': "G#",
+  'tr_butt': "A#"
 }
 
-let gamepadPing = setInterval(() => {
-  if (gamepadFlag) gamepadManager(gamepad_i);
-}, 10);
 
 function gamepadManager(i){
   // console.log("runningggg!");
   const player1 = navigator.getGamepads()[i];
+  let leftJoyY = player1.axes[1];
+  let rightJoyY = player1.axes[3];
+  let octave;
+  // JOYSTICKS
+  let leftJoyState = getJoyState(leftJoyY);
+  let rightJoyState = getJoyState(rightJoyY);
+
+  // Check if left is up & right is down
+  if (leftJoyState == "up" && rightJoyState == "up") {
+    octave = defaultOctave;
+    octave+=2;
+  } 
+  // Check if left is down & right is up
+  else if (leftJoyState == "down" && rightJoyState == "down") {
+    octave = defaultOctave;
+    octave-=2;
+  } 
+  // Check if either is up
+  else if (leftJoyState == "up" || rightJoyState == "up") {
+    octave = defaultOctave;
+    octave+=1;
+  } 
+  // Check if either is down
+  else if (leftJoyState == "down" || rightJoyState == "down") {
+    octave = defaultOctave;
+    octave-=1;
+  } 
+  // Check if both are neutral
+  else if (leftJoyState == "neutral" && rightJoyState == "neutral") {
+    octave = defaultOctave;
+  }
+
+  // BUTTONS
   player1.buttons.forEach((button,i) => {
     let j = buttonMapper[i];
     if(button.pressed==true){
@@ -169,7 +208,7 @@ function gamepadManager(i){
         p1Flag[j] = true;
         // console.log(j+' started');
         p1Started[j]=true;
-        let noteID=noteMapper[j];
+        let noteID=noteMapper[j]+octave;
         midiManager(noteID,true,midiOutputControllerName);
       }
     }else{
@@ -177,7 +216,7 @@ function gamepadManager(i){
       // console.log(j+' completed');   
         p1Flag[j] = false;
         p1Started[j]=false;
-        let noteID=noteMapper[j];
+        let noteID=noteMapper[j]+octave;
         midiManager(noteID,false,midiOutputControllerName);
       } 
     }
@@ -186,12 +225,30 @@ function gamepadManager(i){
   // gamepadFlag = false;
 }
 
+function getJoyState(x){
+  if (x < -jThresh) {
+    return "up";
+  } else if (x > jThresh) {
+    return "down";
+  } else {
+    return "neutral";
+  }
+}
+
 function midiManager(noteID,state,deviceName){
   let midiDevice = WebMidi.getOutputByName(deviceName);
+  // midiDevice.setChannel(1);
   if(state){
-    midiDevice.playNote(noteID,{attack:0.5});
+    // console.log("played "+noteID);
+    midiDevice.playNote(noteID,{attack:0.64, channels:[1]}); 
+    // midiDevice.playNote(noteID, { 
+    //   attack: 0.5, 
+    //   duration: 10 
+    // });
+    
   }else{
-    midiDevice.stopNote(noteID);
+    // console.log("stopped "+noteID);
+    midiDevice.stopNote(noteID,{channels:[1]});
   }
 }
 
