@@ -3,7 +3,7 @@
 let midiOutputControllerName;
 const midiDropdown = document.getElementById('midi_dropdown');
 
-let jThresh = 0.2;
+let jThresh = 0.9;
 let defaultOctave = 4;
 
 let gamepadFlag = false;
@@ -11,7 +11,6 @@ let gamepad_i;
 
 let gamepadPing = setInterval(() => {
   if (gamepadFlag) gamepadManager(gamepad_i);
-  
 }, 10);
 
 
@@ -175,21 +174,47 @@ function gamepadManager(i){
   const player1 = navigator.getGamepads()[i];
   let leftJoyY = player1.axes[1];
   let rightJoyY = player1.axes[3];
+  let leftJoyX = player1.axes[0];
+  let rightJoyX = player1.axes[2];
+  let activeJoyCount = 0;
   let octave;
-  // JOYSTICKS
-  let leftJoyState = getJoyState(leftJoyY);
-  let rightJoyState = getJoyState(rightJoyY);
 
+  // JOYSTICKS
+  let leftJoyState = getJoyState(leftJoyY, leftJoyX);
+  let rightJoyState = getJoyState(rightJoyY, rightJoyX);
+
+  
+  // BOTH TOP & BOTTOM FOR OCTAVE SET
   // Check if left is up & right is down
-  if (leftJoyState == "up" && rightJoyState == "up") {
+  // if (leftJoyState == "left" && rightJoyState == "up") {
+  //   octave = defaultOctave;
+  //   octave+=2;
+  // } 
+  // // Check if left is down & right is up
+  // else if (leftJoyState == "down" && rightJoyState == "down") {
+  //   octave = defaultOctave;
+  //   octave-=2;
+  // } 
+  if (leftJoyState != "neutral"){
+    activeJoyCount++;
+  };
+  if (rightJoyState != "neutral"){
+    activeJoyCount++;
+  };
+  // Check if both are active
+  if (activeJoyCount > 1){
+    octave = defaultOctave;
+  }
+  // Check if either is right
+  else if (leftJoyState == "right" || rightJoyState == "right"){
     octave = defaultOctave;
     octave+=2;
-  } 
-  // Check if left is down & right is up
-  else if (leftJoyState == "down" && rightJoyState == "down") {
+  }
+  // Check if either is left
+  else if(leftJoyState == "left" || rightJoyState == "left"){
     octave = defaultOctave;
     octave-=2;
-  } 
+  }
   // Check if either is up
   else if (leftJoyState == "up" || rightJoyState == "up") {
     octave = defaultOctave;
@@ -230,12 +255,17 @@ function gamepadManager(i){
   // gamepadFlag = false;
 }
 
-function getJoyState(x){
-  if (x < -jThresh) {
+function getJoyState(y,x){
+  if (y < -jThresh) {
     return "up";
-  } else if (x > jThresh) {
+  } else if (y > jThresh) {
     return "down";
-  } else {
+  } else if (x<-jThresh){
+    return "left";
+  }else if(x>jThresh){
+    return "right";
+  }
+  else {
     return "neutral";
   }
 }
