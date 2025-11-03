@@ -23,7 +23,7 @@ window.addEventListener("gamepadconnected", (e) => {
   hidePrompter();
   navigator.getGamepads().forEach((gamepad,i) => {
     if(gamepad!=null){
-        // console.log(gamepad);
+        console.log(gamepad);
         gamepad_i = i;
         gamepadManager(gamepad_i);
     }
@@ -116,7 +116,9 @@ let p1Flag = {
   'sr_butt': false,
   'tl_butt': false,
   'tr_butt': false,
-  'mr_butt': false
+  'mr_butt': false,
+  'ml_butt': false,
+  'jr_butt': false
 }
 
 let p1Started = {
@@ -132,7 +134,9 @@ let p1Started = {
   'sr_butt': false,
   'tl_butt': false,
   'tr_butt': false,
-  'mr_butt': false
+  'mr_butt': false,
+  'ml_butt': false,
+  'jr_butt': false
 }
 
 let buttonMapper = {
@@ -148,8 +152,9 @@ let buttonMapper = {
   5:'sr_butt',
   6:'tl_butt',
   7:'tr_butt',
-  9:'mr_butt'
-
+  9:'mr_butt',
+  8:'ml_butt',
+  11: 'jr_butt'
 }
 
 let noteMapper = {
@@ -168,6 +173,7 @@ let noteMapper = {
   'mr_butt': 'B'
 }
 
+let noteOnList = [];
 
 function gamepadManager(i){
   // console.log("runningggg!");
@@ -183,24 +189,14 @@ function gamepadManager(i){
   let leftJoyState = getJoyState(leftJoyY, leftJoyX);
   let rightJoyState = getJoyState(rightJoyY, rightJoyX);
 
-  
-  // BOTH TOP & BOTTOM FOR OCTAVE SET
-  // Check if left is up & right is down
-  // if (leftJoyState == "left" && rightJoyState == "up") {
-  //   octave = defaultOctave;
-  //   octave+=2;
-  // } 
-  // // Check if left is down & right is up
-  // else if (leftJoyState == "down" && rightJoyState == "down") {
-  //   octave = defaultOctave;
-  //   octave-=2;
-  // } 
   if (leftJoyState != "neutral"){
     activeJoyCount++;
   };
   if (rightJoyState != "neutral"){
     activeJoyCount++;
   };
+
+
   // Check if both are active
   if (activeJoyCount > 1){
     octave = defaultOctave;
@@ -238,16 +234,33 @@ function gamepadManager(i){
         p1Flag[j] = true;
         // console.log(j+' started');
         p1Started[j]=true;
-        let noteID=noteMapper[j]+octave;
-        midiManager(noteID,true,midiOutputControllerName);
+        if(noteMapper[j]){
+          let noteID=noteMapper[j]+octave;
+          midiManager(noteID,true,midiOutputControllerName);
+        }else{
+          // console.log("paused cache: " +noteOnList);
+          noteOnListToggle(false);
+          if(j=='jr_butt'){
+            // console.log("cleared cache");
+            noteOnList.length = 0;
+          }
+        }
       }
-    }else{
+    }
+    else{
       if(p1Flag[j]==true){
       // console.log(j+' completed');   
         p1Flag[j] = false;
         p1Started[j]=false;
-        let noteID=noteMapper[j]+octave;
-        midiManager(noteID,false,midiOutputControllerName);
+        if(noteMapper[j]){
+          let noteID=noteMapper[j]+octave;
+          midiManager(noteID,false,midiOutputControllerName);
+        }else{
+          if(j=='ml_butt'){
+          // console.log("unpaused cache");
+          noteOnListToggle(true);
+          }
+        }
       } 
     }
   });
@@ -270,20 +283,38 @@ function getJoyState(y,x){
   }
 }
 
-function midiManager(noteID,state,deviceName){
+function midiManager(noteID,state,deviceName, ignorePop=false){
   let midiDevice = WebMidi.getOutputByName(deviceName);
-  // midiDevice.setChannel(1);
   if(state){
-    // console.log("played "+noteID);
     midiDevice.playNote(noteID,{attack:0.64, channels:[1]}); 
-    // midiDevice.playNote(noteID, { 
-    //   attack: 0.5, 
-    //   duration: 10 
-    // });
-    
+    if(!ignorePop){
+      noteOnList.push(noteID);
+    }
+    // console.log(noteOnList);
   }else{
-    // console.log("stopped "+noteID);
     midiDevice.stopNote(noteID,{channels:[1]});
+    if(!ignorePop){
+      noteOnListPopper(noteID);
+    }
+    // console.log(noteOnList);
   }
 }
 
+function noteOnListPopper(noteID){
+  let tempList = noteOnList.filter(item => item != noteID);
+  noteOnList = tempList;
+}
+
+function noteOnListToggle(state, deviceName){
+  if(noteOnList.length>0){
+    if(!state){
+      noteOnList.forEach(note => {
+        midiManager(note,false,midiOutputControllerName,true);
+      });
+    }else{
+      noteOnList.forEach(note => {
+        midiManager(note,true,midiOutputControllerName,true);
+      });
+    };
+  }
+}
