@@ -38,6 +38,7 @@ window.addEventListener("gamepaddisconnected", (e) => {
 function hidePrompter(){
   document.getElementById('prompter').style.display="none";
   document.getElementById('gamepad_loader').style.display="flex";
+  document.getElementById('gamepad_loader').style.scale=1;
   document.querySelectorAll('#gamepad_svg path').forEach((path) => {
     path.style.animation = 'draw_svg 1s ease-out forwards';
   });
@@ -170,7 +171,23 @@ let noteMapper = {
   'sr_butt': "A",
   'tl_butt': "G#",
   'tr_butt': "A#",
-  'mr_butt': 'B'
+  'mr_butt': "B"
+}
+
+let pianoMapper = {
+  "C": "svg_c",
+  "F": "svg_f",
+  "D": "svg_d",
+  "E": "svg_e",
+  "C#": "svg_csharp",
+  "F#": "svg_fsharp",
+  "D#": "svg_dsharp",
+  "F#": "svg_fsharp",
+  "G": "svg_g",
+  "A": "svg_a",
+  "G#": "svg_gsharp",
+  "A#": "svg_asharp",
+  "B": "svg_b"
 }
 
 let noteOnList = [];
@@ -255,6 +272,7 @@ function gamepadManager(i){
         if(noteMapper[j]){
           let noteID=noteMapper[j]+octave;
           midiManager(noteID,false,midiOutputControllerName);
+          highlightPiano(false,pianoMapper[j],"svg-highlight");
         }else{
           if(j=='ml_butt'){
           // console.log("unpaused cache");
@@ -287,12 +305,14 @@ function midiManager(noteID,state,deviceName, ignorePop=false){
   let midiDevice = WebMidi.getOutputByName(deviceName);
   if(state){
     midiDevice.playNote(noteID,{attack:0.64, channels:[1]}); 
+    highlightPiano(true,noteID,"svg-highlight");
     if(!ignorePop){
       noteOnList.push(noteID);
     }
     // console.log(noteOnList);
   }else{
     midiDevice.stopNote(noteID,{channels:[1]});
+    highlightPiano(false,noteID,"svg-highlight");
     if(!ignorePop){
       noteOnListPopper(noteID);
     }
@@ -316,5 +336,15 @@ function noteOnListToggle(state, deviceName){
         midiManager(note,true,midiOutputControllerName,true);
       });
     };
+  }
+}
+
+function highlightPiano(state,noteID,className){
+  let note = noteID.slice(0, -1); 
+  let key = document.getElementById(pianoMapper[note]);
+  if(state){
+    key.classList.add(className);
+  }else{
+    key.classList.remove(className);
   }
 }
