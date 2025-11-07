@@ -31,14 +31,13 @@ window.addEventListener("gamepadconnected", (e) => {
 });
 
 window.addEventListener("gamepaddisconnected", (e) => {
-  alert("disconnected");
+  alert("Controller disconnected");
   gamepadFlag = false;
 });
 
 function hidePrompter(){
   document.getElementById('prompter').style.display="none";
   document.getElementById('gamepad_loader').style.display="flex";
-  document.getElementById('gamepad_loader').style.scale=1;
   document.querySelectorAll('#gamepad_svg path').forEach((path) => {
     path.style.animation = 'draw_svg 1s ease-out forwards';
   });
@@ -217,30 +216,36 @@ function gamepadManager(i){
   // Check if both are active
   if (activeJoyCount > 1){
     octave = defaultOctave;
+    octaveTrackManager(octave);
   }
   // Check if either is right
   else if (leftJoyState == "right" || rightJoyState == "right"){
     octave = defaultOctave;
-    octave+=2;
+    octave+=1;
+    octaveTrackManager(octave);
   }
   // Check if either is left
   else if(leftJoyState == "left" || rightJoyState == "left"){
     octave = defaultOctave;
-    octave-=2;
+    octave-=1;
+    octaveTrackManager(octave);
   }
   // Check if either is up
   else if (leftJoyState == "up" || rightJoyState == "up") {
     octave = defaultOctave;
-    octave+=1;
+    octave+=2;
+    octaveTrackManager(octave);
   } 
   // Check if either is down
   else if (leftJoyState == "down" || rightJoyState == "down") {
     octave = defaultOctave;
-    octave-=1;
+    octave-=2;
+    octaveTrackManager(octave);
   } 
   // Check if both are neutral
   else if (leftJoyState == "neutral" && rightJoyState == "neutral") {
     octave = defaultOctave;
+    octaveTrackManager(octave);
   }
 
   // BUTTONS
@@ -272,7 +277,6 @@ function gamepadManager(i){
         if(noteMapper[j]){
           let noteID=noteMapper[j]+octave;
           midiManager(noteID,false,midiOutputControllerName);
-          highlightPiano(false,pianoMapper[j],"svg-highlight");
         }else{
           if(j=='ml_butt'){
           // console.log("unpaused cache");
@@ -346,5 +350,22 @@ function highlightPiano(state,noteID,className){
     key.classList.add(className);
   }else{
     key.classList.remove(className);
+  }
+}
+
+let octaveGapChecker=8;
+
+function octaveTrackManager(octave){
+  let gap = octave-defaultOctave;
+  if(octaveGapChecker!=gap){
+    // console.log("octave update called");
+    octaveGapChecker = gap;
+    // console.log(octaveGapChecker);
+    let highGroup = document.getElementById("oct_"+gap);
+    let octaveGroups = document.getElementsByClassName("octave_svg");
+    for (let x of octaveGroups) {
+      x.classList.remove("svg-active");
+    }
+    highGroup.classList.add("svg-active");
   }
 }
