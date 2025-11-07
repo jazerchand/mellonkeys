@@ -3,6 +3,10 @@
   --joy_white: #f8f8f8;
   --joy_lightblue: aliceblue;
   --joy_dark: darkslategray;
+  --joy_piano_base: #b9e2e2;
+  --joy_piano_base2: #a6d9d9;
+  --joy_piano_dark: #59a5a5;
+  --joy_spark: #fcf653;
 }
 
 body,html{
@@ -64,9 +68,18 @@ section{
 
 .gamepad_loader{
     display: none;
+    width: fit-content;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
+}
+
+.gamepad_drop{
+    display: flex;
+    justify-content: center;
+    align-items: center;
     flex-direction: row;
+    margin-bottom: 3.5em;
 }
 
 .gamepad_svg{
@@ -97,6 +110,45 @@ section{
     border-radius: 4px;
     color: var(--joy_dark);
 }
+
+.pianokeys_svg,.pianotrack_svg{
+    /* display: none; */
+    width: 46vw;
+    fill: var(--joy_piano_base);
+    stroke: var(--joy_piano_dark);
+    stroke-width: 1px;
+}
+
+.pianotrack_svg{
+    margin-top: 2em;
+    width: 36vw;
+}
+
+.octave_svg{
+    opacity: 0.3;
+}
+
+.pianokeys_svg path{
+    -webkit-transition: 100ms ease-in-out;
+}
+
+
+.svg-fill{
+    fill: var(--joy_piano_dark);
+}
+
+.svg-fill_sharp{
+    fill: var(--joy_piano_base);
+}
+
+.svg-highlight{
+    fill: var(--joy_spark);
+}
+
+.svg-active{
+    opacity: 1;
+}
+
 
 /* ANIMATIONS */
 

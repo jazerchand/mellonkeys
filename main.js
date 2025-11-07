@@ -31,7 +31,7 @@ window.addEventListener("gamepadconnected", (e) => {
 });
 
 window.addEventListener("gamepaddisconnected", (e) => {
-  alert("disconnected");
+  alert("Controller disconnected");
   gamepadFlag = false;
 });
 
@@ -170,7 +170,23 @@ let noteMapper = {
   'sr_butt': "A",
   'tl_butt': "G#",
   'tr_butt': "A#",
-  'mr_butt': 'B'
+  'mr_butt': "B"
+}
+
+let pianoMapper = {
+  "C": "svg_c",
+  "F": "svg_f",
+  "D": "svg_d",
+  "E": "svg_e",
+  "C#": "svg_csharp",
+  "F#": "svg_fsharp",
+  "D#": "svg_dsharp",
+  "F#": "svg_fsharp",
+  "G": "svg_g",
+  "A": "svg_a",
+  "G#": "svg_gsharp",
+  "A#": "svg_asharp",
+  "B": "svg_b"
 }
 
 let noteOnList = [];
@@ -200,30 +216,36 @@ function gamepadManager(i){
   // Check if both are active
   if (activeJoyCount > 1){
     octave = defaultOctave;
+    octaveTrackManager(octave);
   }
   // Check if either is right
   else if (leftJoyState == "right" || rightJoyState == "right"){
     octave = defaultOctave;
-    octave+=2;
+    octave+=1;
+    octaveTrackManager(octave);
   }
   // Check if either is left
   else if(leftJoyState == "left" || rightJoyState == "left"){
     octave = defaultOctave;
-    octave-=2;
+    octave-=1;
+    octaveTrackManager(octave);
   }
   // Check if either is up
   else if (leftJoyState == "up" || rightJoyState == "up") {
     octave = defaultOctave;
-    octave+=1;
+    octave+=2;
+    octaveTrackManager(octave);
   } 
   // Check if either is down
   else if (leftJoyState == "down" || rightJoyState == "down") {
     octave = defaultOctave;
-    octave-=1;
+    octave-=2;
+    octaveTrackManager(octave);
   } 
   // Check if both are neutral
   else if (leftJoyState == "neutral" && rightJoyState == "neutral") {
     octave = defaultOctave;
+    octaveTrackManager(octave);
   }
 
   // BUTTONS
@@ -287,12 +309,14 @@ function midiManager(noteID,state,deviceName, ignorePop=false){
   let midiDevice = WebMidi.getOutputByName(deviceName);
   if(state){
     midiDevice.playNote(noteID,{attack:0.64, channels:[1]}); 
+    highlightPiano(true,noteID,"svg-highlight");
     if(!ignorePop){
       noteOnList.push(noteID);
     }
     // console.log(noteOnList);
   }else{
     midiDevice.stopNote(noteID,{channels:[1]});
+    highlightPiano(false,noteID,"svg-highlight");
     if(!ignorePop){
       noteOnListPopper(noteID);
     }
@@ -316,5 +340,32 @@ function noteOnListToggle(state, deviceName){
         midiManager(note,true,midiOutputControllerName,true);
       });
     };
+  }
+}
+
+function highlightPiano(state,noteID,className){
+  let note = noteID.slice(0, -1); 
+  let key = document.getElementById(pianoMapper[note]);
+  if(state){
+    key.classList.add(className);
+  }else{
+    key.classList.remove(className);
+  }
+}
+
+let octaveGapChecker=8;
+
+function octaveTrackManager(octave){
+  let gap = octave-defaultOctave;
+  if(octaveGapChecker!=gap){
+    // console.log("octave update called");
+    octaveGapChecker = gap;
+    // console.log(octaveGapChecker);
+    let highGroup = document.getElementById("oct_"+gap);
+    let octaveGroups = document.getElementsByClassName("octave_svg");
+    for (let x of octaveGroups) {
+      x.classList.remove("svg-active");
+    }
+    highGroup.classList.add("svg-active");
   }
 }
