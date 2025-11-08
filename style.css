@@ -75,7 +75,8 @@ section{
 }
 
 .gamepad_drop{
-    display: flex;
+    /* display: flex; */
+    display: none;
     justify-content: center;
     align-items: center;
     flex-direction: row;
@@ -109,6 +110,39 @@ section{
     background: var(--joy_lightblue);
     border-radius: 4px;
     color: var(--joy_dark);
+}
+
+
+.sample_selector  {
+    /* display: flex; */
+    display: none;
+    width: fit-content;
+    border: 1px solid var(--joy_piano_base);
+    /* box-shadow: inset 0px 0px 24px -4px var(--joy_piano_dark); */
+    border-radius: 24px;
+    margin-bottom: 3em;
+}
+
+.sample_button {    
+    width: fit-content;
+    height: 2em;
+    padding: 0em 1em;
+    color: var(--joy_piano_base);
+    font-size: 1.5vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 24px;
+}
+
+.sample_button:hover{
+    cursor: pointer;
+    color: var(--joy_white);
+}
+
+.sample_active{
+    background: var(--joy_white);
+    color: var(--joy_teal)!important;
 }
 
 .pianokeys_svg,.pianotrack_svg{
