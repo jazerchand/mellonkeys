@@ -36,9 +36,9 @@ startbttn.addEventListener('mousedown', function(){
 
 function playTheme(instrument, duration, velocity){
     instrument.triggerAttackRelease("C3",duration,Tone.now(),velocity);
-    instrument.triggerAttackRelease("G3",duration,Tone.now()+.1,velocity);
-    instrument.triggerAttackRelease("B3",duration,Tone.now()+.2,velocity);
-    instrument.triggerAttackRelease("C4",duration,Tone.now()+.4,velocity);
+    instrument.triggerAttackRelease("G3",duration,Tone.now()+.2,velocity);
+    instrument.triggerAttackRelease("B3",duration,Tone.now()+.4,velocity);
+    instrument.triggerAttackRelease("C4",duration,Tone.now()+.6,velocity);
 }
 
 async function setupPiano() {
@@ -390,7 +390,9 @@ function midiManager(noteID,state,deviceName, ignorePop=false){
 
 function samplerManager(noteID,state,instrument, ignorePop=false){
   if(state){
+    //Set this line to only TriggerAttack and remove delay [# after noteID] and de-comment TriggerRelease to turn off sustain
     instrument.triggerAttackRelease(noteID,5,Tone.now(),keyVelocity); 
+    // 
     highlightPiano(true,noteID,"svg-highlight");
     if(!ignorePop){
       noteOnList.push(noteID);

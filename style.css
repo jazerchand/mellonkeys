@@ -232,15 +232,15 @@ section{
 
 .pianokeys_svg,.pianotrack_svg{
     /* display: none; */
-    width: 46vw;
+    width: 48vw;
     fill: var(--joy_piano_base);
-    stroke: var(--joy_piano_dark);
+    stroke: var(--joy_teal);
     stroke-width: 1px;
 }
 
 .pianotrack_svg{
     margin-top: 2em;
-    width: 36vw;
+    width: 38vw;
 }
 
 .octave_svg{
