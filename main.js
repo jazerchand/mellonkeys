@@ -9,6 +9,7 @@ let loaderscreen = document.getElementById('loader_window');
 let instruments=[];
 let keyVelocity=0.85;
 
+let pingRate = 2;
 let jThresh = 0.9;
 let defaultOctave = 4;
 
@@ -17,7 +18,7 @@ let gamepad_i;
 
 let gamepadPing = setInterval(() => {
   if (gamepadFlag) gamepadManager(gamepad_i);
-}, 3);
+}, pingRate);
 
 
 startbttn.addEventListener('mousedown', function(){
@@ -375,28 +376,31 @@ function midiManager(noteID,state,deviceName, ignorePop=false){
     if(!ignorePop){
       noteOnList.push(noteID);
     }
-    // console.log(noteOnList);
+    console.log(noteOnList);
   }else{
     midiDevice.stopNote(noteID,{channels:[1]});
     highlightPiano(false,noteID,"svg-highlight");
     if(!ignorePop){
       noteOnListPopper(noteID);
     }
-    // console.log(noteOnList);
+    console.log(noteOnList);
   }
 }
 
 
 function samplerManager(noteID,state,instrument, ignorePop=false){
   if(state){
-    instrument.triggerAttack(noteID,Tone.now(),keyVelocity); 
+    instrument.triggerAttackRelease(noteID,5,Tone.now(),keyVelocity); 
     highlightPiano(true,noteID,"svg-highlight");
     if(!ignorePop){
       noteOnList.push(noteID);
     }
     console.log(noteOnList);
   }else{
-    instrument.triggerRelease(noteID);
+    //Remove this line for cache activation
+    noteOnList.length = 0;
+    //
+    // instrument.triggerRelease(noteID);
     highlightPiano(false,noteID,"svg-highlight");
     if(!ignorePop){
       noteOnListPopper(noteID);

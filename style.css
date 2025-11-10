@@ -1,14 +1,14 @@
 :root {
   --joy_teal: #773bb7; /* Global variable */
   --joy_zeal: #391244;
-  --joy_white: #faee88;
+  --joy_white: #fefefe;
   --joy_highlight: #9047de;
   --joy_lightblue: aliceblue;
   --joy_dark: #432f4f;
   --joy_piano_base: #d6b9e2;
   --joy_piano_base2: #c2a6d9;
   --joy_piano_dark: #8d59a5;
-  --joy_spark: #fcd753;
+  --joy_spark: #FFDD4A;
 }
 
 body,html{
