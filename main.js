@@ -3,6 +3,12 @@
 let midiOutputControllerName;
 const midiDropdown = document.getElementById('midi_dropdown');
 
+let startbttn = document.getElementById('start');
+
+let loaderscreen = document.getElementById('loader_window');
+let instruments=[];
+let keyVelocity=0.85;
+
 let jThresh = 0.9;
 let defaultOctave = 4;
 
@@ -11,8 +17,57 @@ let gamepad_i;
 
 let gamepadPing = setInterval(() => {
   if (gamepadFlag) gamepadManager(gamepad_i);
-}, 10);
+}, 3);
 
+
+startbttn.addEventListener('mousedown', function(){
+  startbttn.style.display = 'none';
+  document.getElementById('loading_icon').style.display="block";
+  setupPiano().then(result => {
+    instruments.push(result);
+    console.dir("got "+instruments[0]+" back");
+    playTheme(instruments[0],2,.5);
+    document.getElementById('preloader').style.display="none";
+    }).catch(err =>{
+      console.log(err);
+    });
+});
+
+function playTheme(instrument, duration, velocity){
+    instrument.triggerAttackRelease("C3",duration,Tone.now(),velocity);
+    instrument.triggerAttackRelease("G3",duration,Tone.now()+.1,velocity);
+    instrument.triggerAttackRelease("B3",duration,Tone.now()+.2,velocity);
+    instrument.triggerAttackRelease("C4",duration,Tone.now()+.4,velocity);
+}
+
+async function setupPiano() {
+    await Tone.start();
+    let piano =  new Tone.Sampler({
+	urls: {
+    "C3":"C3.mp3",
+    "D#3":"Ds3.mp3",
+    "F#3":"Fs3.mp3",
+    "A3":"A3.mp3",
+    "C4":"C4.mp3",
+    "D#4":"Ds4.mp3",
+    "F#4":"Fs4.mp3",
+    "A4":"A4.mp3",
+    "C5":"C5.mp3",
+    "D#5":"Ds5.mp3",
+    "F#5":"Fs5.mp3",
+    "A5":"A5.mp3",
+    "C6":"C6.mp3",
+    "D#6":"Ds6.mp3",
+    "F#6":"Fs6.mp3",
+    "A6":"A6.mp3"
+	},
+	release: 1,
+	baseUrl: "https://tonejs.github.io/audio/salamander/",
+    }).toDestination();
+    await Tone.loaded();
+
+    return piano;
+};
 
 midiDropdown.addEventListener("change", (e)=>{
   updateMidiOutputController();
@@ -35,6 +90,8 @@ window.addEventListener("gamepaddisconnected", (e) => {
   gamepadFlag = false;
 });
 
+
+
 function hidePrompter(){
   document.getElementById('prompter').style.display="none";
   document.getElementById('gamepad_loader').style.display="flex";
@@ -44,7 +101,10 @@ function hidePrompter(){
 };
 
 
-WebMidi.enable().then(onMIDIEnabled).catch(err => alert(err));
+// DISABLED MIDI
+function turnOnMidi(){
+  WebMidi.enable().then(onMIDIEnabled).catch(err => alert(err));
+}
 
 function onMIDIEnabled(){
      WebMidi.addListener("connected", (e) => {
@@ -258,7 +318,8 @@ function gamepadManager(i){
         p1Started[j]=true;
         if(noteMapper[j]){
           let noteID=noteMapper[j]+octave;
-          midiManager(noteID,true,midiOutputControllerName);
+            samplerManager(noteID,true, instruments[0]);
+          // midiManager(noteID,true,midiOutputControllerName);
         }else{
           // console.log("paused cache: " +noteOnList);
           noteOnListToggle(false);
@@ -276,7 +337,8 @@ function gamepadManager(i){
         p1Started[j]=false;
         if(noteMapper[j]){
           let noteID=noteMapper[j]+octave;
-          midiManager(noteID,false,midiOutputControllerName);
+            samplerManager(noteID,false, instruments[0]);
+          // midiManager(noteID,false,midiOutputControllerName);
         }else{
           if(j=='ml_butt'){
           // console.log("unpaused cache");
@@ -324,6 +386,25 @@ function midiManager(noteID,state,deviceName, ignorePop=false){
   }
 }
 
+
+function samplerManager(noteID,state,instrument, ignorePop=false){
+  if(state){
+    instrument.triggerAttack(noteID,Tone.now(),keyVelocity); 
+    highlightPiano(true,noteID,"svg-highlight");
+    if(!ignorePop){
+      noteOnList.push(noteID);
+    }
+    console.log(noteOnList);
+  }else{
+    instrument.triggerRelease(noteID);
+    highlightPiano(false,noteID,"svg-highlight");
+    if(!ignorePop){
+      noteOnListPopper(noteID);
+    }
+    console.log(noteOnList);
+  }
+}
+
 function noteOnListPopper(noteID){
   let tempList = noteOnList.filter(item => item != noteID);
   noteOnList = tempList;
@@ -333,11 +414,13 @@ function noteOnListToggle(state, deviceName){
   if(noteOnList.length>0){
     if(!state){
       noteOnList.forEach(note => {
-        midiManager(note,false,midiOutputControllerName,true);
+        samplerManager(note,false, instruments[0],true);
+        // midiManager(note,false,midiOutputControllerName,true);
       });
     }else{
       noteOnList.forEach(note => {
-        midiManager(note,true,midiOutputControllerName,true);
+        samplerManager(note,true, instruments[0],true);
+        // midiManager(note,true,midiOutputControllerName,true);
       });
     };
   }
@@ -353,6 +436,7 @@ function highlightPiano(state,noteID,className){
   }
 }
 
+// initalise with value that matches no other octave value (default[0], +-1, +-2)
 let octaveGapChecker=8;
 
 function octaveTrackManager(octave){

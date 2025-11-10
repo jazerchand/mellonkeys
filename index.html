@@ -18,9 +18,23 @@
    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <section class="container" id="preloader">
+        <div class="item preloader_item" id="preloader_intro">
+            <h1 class="bossy">Joykeys</h1>
+            <h3 class="body_med">Kindly <span>adjust your system volume</span> before entering this website as it plays sound.</h3>
+            <button class="primary" id="start">
+                Enter Site
+            </button>
+            <div id="loading_icon">
+                <svg viewBox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12.6891 11.6173C13.5744 10.5002 14.103 9.08759 14.103 7.55151C14.103 3.93321 11.1698 1 7.55151 1C3.93321 1 1 3.93321 1 7.55151C1 9.70221 2.03632 11.6109 3.63684 12.8054" stroke-linecap="round"/>
+                </svg>
+            </div>
+        </div>
+    </section>
     <section class="container">
         <div class="item" id="prompter">
-            <h1 class="body_big blink_soft">Press any button on your controller to begin.</h1>
+            <h1 class="bossy blink_soft">Press any button on your controller</h1>
         </div>
         <div class="item gamepad_loader" id="gamepad_loader">
             <div class="item gamepad_drop">
@@ -193,6 +207,9 @@
                 <path d="M512.168 71.6105C512.591 71.1135 513.358 71.1135 513.782 71.6105L517.036 75.4325C517.622 76.1207 517.133 77.1797 516.229 77.1797H509.72C508.816 77.1797 508.327 76.1207 508.913 75.4325L512.168 71.6105Z" class="svg-fill"/>
             </svg>
         </div>
+        <!-- <section class="container loader" id="loader_window">
+            <h1 class="bossy blink_soft">Loading</h1>
+        </section> -->
     </section>
     <script src="http://unpkg.com/tone"></script>
     <script src="https://cdn.jsdelivr.net/npm/webmidi@latest/dist/iife/webmidi.iife.js"></script>

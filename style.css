@@ -1,12 +1,14 @@
 :root {
-  --joy_teal: #4aa6a6; /* Global variable */
-  --joy_white: #f8f8f8;
+  --joy_teal: #773bb7; /* Global variable */
+  --joy_zeal: #391244;
+  --joy_white: #faee88;
+  --joy_highlight: #9047de;
   --joy_lightblue: aliceblue;
-  --joy_dark: darkslategray;
-  --joy_piano_base: #b9e2e2;
-  --joy_piano_base2: #a6d9d9;
-  --joy_piano_dark: #59a5a5;
-  --joy_spark: #fcf653;
+  --joy_dark: #432f4f;
+  --joy_piano_base: #d6b9e2;
+  --joy_piano_base2: #c2a6d9;
+  --joy_piano_dark: #8d59a5;
+  --joy_spark: #fcd753;
 }
 
 body,html{
@@ -34,7 +36,7 @@ section{
 }   
 
 .container {
-    background: radial-gradient(var(--joy_teal),var(--joy_white));
+    background: radial-gradient(var(--joy_teal),var(--joy_zeal));
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -42,15 +44,84 @@ section{
 }
 
 .item{
-    width: 50%;
+    width: 80%;
     text-align: center;
 }
 
+.preloader_item{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 50%!important;
+}
 
-.body_big{
+#preloader{
+    background: radial-gradient(var(--joy_teal),var(--joy_zeal));
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9;
+}
+
+
+.bossy{
     font-size: 4.5vw;
     color: var(--joy_lightblue);
     letter-spacing: 2.5px;
+}
+
+#preloader h1{
+    margin-bottom: .25em;
+}
+
+#preloader h3{
+    color: var(--joy_piano_base);
+    width: 60%;
+    margin-bottom: 1em;
+}
+
+#preloader span{
+    font-weight: 600;
+}
+
+.primary{
+    background: var(--joy_teal);
+    padding: 1em 2em;
+    font-family: inherit;
+    text-transform: uppercase;
+    font-weight: 500;
+    letter-spacing: 3px;
+    border: none;
+    color: var(--joy_piano_base);
+    font-size: 1vw;
+    border-radius: 100px;
+    border: 2px solid var(--joy_highlight);
+}
+
+.primary:hover{
+    cursor: pointer;
+    color: var(--joy_dark);
+    background: var(--joy_spark);
+    border: 2px solid var(--joy_spark);
+}
+
+#loading_icon {
+    display: none;
+}
+
+#loading_icon svg {
+    margin-top: 10px;
+    width: 38px;
+    height: 38px;
+    stroke-width: 2px;
+    fill: none;
+    stroke: var(--joy_spark);
+    -webkit-transform-origin-y: 19.2px;
+    -webkit-transform: rotate(0deg);
+    animation: rotateicon_anim infinite 1.6s linear forwards;
 }
 
 .body_med{
@@ -145,6 +216,20 @@ section{
     color: var(--joy_teal)!important;
 }
 
+.loader{
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    /* background: black; */
+    z-index: 99;
+}
+
+.loader h1{
+    animation: blink_soft_anim 0.5s ease-out infinite;
+}
+
 .pianokeys_svg,.pianotrack_svg{
     /* display: none; */
     width: 46vw;
@@ -186,6 +271,16 @@ section{
 
 /* ANIMATIONS */
 
+
+@keyframes rotateicon_anim{
+    0%{
+        -webkit-transform: rotate(0deg);
+    }
+    100%{
+        -webkit-transform: rotate(359deg);
+    }
+}
+
 @keyframes blink_soft_anim{
     0%{
         opacity: .5;
@@ -197,6 +292,7 @@ section{
         opacity: .5;
     }
 }
+
 
 .gamepad_svg path:nth-child(2) { animation-delay: 0.2s; stroke-width: 1.1; }
 .gamepad_svg path:nth-child(3) { animation-delay: 0.3s; stroke-width: 1.1; }
