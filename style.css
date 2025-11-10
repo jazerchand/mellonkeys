@@ -1,14 +1,12 @@
 :root {
-  --joy_teal: #773bb7; /* Global variable */
-  --joy_zeal: #391244;
-  --joy_white: #fefefe;
-  --joy_highlight: #9047de;
+  --joy_teal: #4aa6a6; /* Global variable */
+  --joy_white: #f8f8f8;
   --joy_lightblue: aliceblue;
-  --joy_dark: #432f4f;
-  --joy_piano_base: #d6b9e2;
-  --joy_piano_base2: #c2a6d9;
-  --joy_piano_dark: #8d59a5;
-  --joy_spark: #FFDD4A;
+  --joy_dark: darkslategray;
+  --joy_piano_base: #b9e2e2;
+  --joy_piano_base2: #a6d9d9;
+  --joy_piano_dark: #59a5a5;
+  --joy_spark: #fcf653;
 }
 
 body,html{
@@ -36,7 +34,7 @@ section{
 }   
 
 .container {
-    background: radial-gradient(var(--joy_teal),var(--joy_zeal));
+    background: radial-gradient(var(--joy_teal),var(--joy_white));
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -57,7 +55,7 @@ section{
 }
 
 #preloader{
-    background: radial-gradient(var(--joy_teal),var(--joy_zeal));
+    background: radial-gradient(var(--joy_teal),var(--joy_white));
     position: absolute;
     left: 0;
     top: 0;
@@ -74,17 +72,18 @@ section{
 }
 
 #preloader h1{
-    margin-bottom: .25em;
+    margin-bottom: .45em;
+    border-bottom: 2px solid var(--joy_piano_base);
 }
 
 #preloader h3{
-    color: var(--joy_piano_base);
+    color: var(--joy_lightblue);
     width: 60%;
-    margin-bottom: 1em;
+    margin-bottom: 2em;
 }
 
 #preloader span{
-    font-weight: 600;
+    font-weight: 500;
 }
 
 .primary{
@@ -98,14 +97,12 @@ section{
     color: var(--joy_piano_base);
     font-size: 1vw;
     border-radius: 100px;
-    border: 2px solid var(--joy_highlight);
 }
 
 .primary:hover{
     cursor: pointer;
     color: var(--joy_dark);
     background: var(--joy_spark);
-    border: 2px solid var(--joy_spark);
 }
 
 #loading_icon {
@@ -234,7 +231,7 @@ section{
     /* display: none; */
     width: 48vw;
     fill: var(--joy_piano_base);
-    stroke: var(--joy_teal);
+    stroke: var(--joy_piano_dark);
     stroke-width: 1px;
 }
 

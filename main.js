@@ -459,3 +459,18 @@ function octaveTrackManager(octave){
     highGroup.classList.add("svg-active");
   }
 }
+
+
+// PURPLE SCHEME
+// :root {
+//   --joy_teal: #773bb7; /* Global variable */
+//   --joy_zeal: #391244;
+//   --joy_white: #f8f8f8;
+//   --joy_highlight: #9047de;
+//   --joy_lightblue: aliceblue;
+//   --joy_dark: #432f4f;
+//   --joy_piano_base: #d6b9e2;
+//   --joy_piano_base2: #c2a6d9;
+//   --joy_piano_dark: #8d59a5;
+//   --joy_spark: #FFDD4A;
+// }
