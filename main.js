@@ -27,6 +27,7 @@ startbttn.addEventListener('mousedown', function(){
   setupPiano().then(result => {
     instruments.push(result);
     // console.dir("got "+instruments[0]+" back");
+    window.sa_event("piano_loaded");
     playTheme(instruments[0],2,.5);
     document.getElementById('preloader').style.display="none";
     }).catch(err =>{
@@ -35,6 +36,7 @@ startbttn.addEventListener('mousedown', function(){
 });
 
 function playTheme(instrument, duration, velocity){
+    window.sa_event("theme_played");
     instrument.triggerAttackRelease("C3",duration,Tone.now(),velocity);
     instrument.triggerAttackRelease("G3",duration,Tone.now()+.2,velocity);
     instrument.triggerAttackRelease("B3",duration,Tone.now()+.4,velocity);
@@ -79,7 +81,7 @@ window.addEventListener("gamepadconnected", (e) => {
   hidePrompter();
   navigator.getGamepads().forEach((gamepad,i) => {
     if(gamepad!=null){
-        console.log(gamepad);
+        // console.log(gamepad);
         gamepad_i = i;
         gamepadManager(gamepad_i);
     }
@@ -94,6 +96,7 @@ window.addEventListener("gamepaddisconnected", (e) => {
 
 
 function hidePrompter(){
+  window.sa_event("controller_connected");
   document.getElementById('prompter').style.display="none";
   document.getElementById('gamepad_loader').style.display="flex";
   document.querySelectorAll('#gamepad_svg path').forEach((path) => {
@@ -390,6 +393,7 @@ function midiManager(noteID,state,deviceName, ignorePop=false){
 
 function samplerManager(noteID,state,instrument, ignorePop=false){
   if(state){
+    window.sa_event("note_played", { note: noteID });
     //Set this line to only TriggerAttack and remove delay [# after noteID] and de-comment TriggerRelease to turn off sustain
     instrument.triggerAttackRelease(noteID,5,Tone.now(),keyVelocity); 
     // 
@@ -397,7 +401,7 @@ function samplerManager(noteID,state,instrument, ignorePop=false){
     if(!ignorePop){
       noteOnList.push(noteID);
     }
-    console.log(noteOnList);
+    // console.log(noteOnList);
   }else{
     //Remove this line for cache activation
     noteOnList.length = 0;
@@ -407,7 +411,7 @@ function samplerManager(noteID,state,instrument, ignorePop=false){
     if(!ignorePop){
       noteOnListPopper(noteID);
     }
-    console.log(noteOnList);
+    // console.log(noteOnList);
   }
 }
 
