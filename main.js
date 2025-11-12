@@ -26,7 +26,7 @@ startbttn.addEventListener('mousedown', function(){
   document.getElementById('loading_icon').style.display="block";
   setupPiano().then(result => {
     instruments.push(result);
-    console.dir("got "+instruments[0]+" back");
+    // console.dir("got "+instruments[0]+" back");
     playTheme(instruments[0],2,.5);
     document.getElementById('preloader').style.display="none";
     }).catch(err =>{

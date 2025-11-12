@@ -276,6 +276,7 @@ footer{
 }
 
 footer p{
+    font-weight: 300;
     margin-bottom: .5em;
     color: var(--joy_dark)
 }
