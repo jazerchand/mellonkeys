@@ -265,6 +265,21 @@ section{
     opacity: 1;
 }
 
+footer{
+    position: absolute;
+    z-index: 8;
+    width: 100%;
+    height: fit-content;
+    left: 0;
+    bottom: 0;
+    text-align: center;
+}
+
+footer p{
+    margin-bottom: .5em;
+    color: var(--joy_dark)
+}
+
 
 /* ANIMATIONS */
 
